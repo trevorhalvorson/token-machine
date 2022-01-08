@@ -46,10 +46,9 @@ describe("Token contract", function () {
   describe("Minting", function () {
     it("Should allow owner to mint tokens to address", async function () {
       await hardhatToken.mint(addr1.address, 500);
-      const addr1Balance = await hardhatToken.balanceOf(
+      expect(await hardhatToken.balanceOf(
         addr1.address
-      );
-      expect(addr1Balance).to.equal(500);
+      )).to.equal(500);
     });
 
     it("Should fail if minter is not owner", async function () {
@@ -72,15 +71,13 @@ describe("Token contract", function () {
       await hardhatToken.mint(addr1.address, ADDR1_MINT_AMOUNT);
       await hardhatToken.mint(addr2.address, ADDR2_MINT_AMOUNT);
 
-      const addr1Balance = await hardhatToken.balanceOf(
+      expect(await hardhatToken.balanceOf(
         addr1.address
-      );
-      expect(addr1Balance).to.equal(ADDR1_MINT_AMOUNT);
+      )).to.equal(ADDR1_MINT_AMOUNT);
 
-      const addr2Balance = await hardhatToken.balanceOf(
+      expect(await hardhatToken.balanceOf(
         addr2.address
-      );
-      expect(addr2Balance).to.equal(ADDR2_MINT_AMOUNT);
+      )).to.equal(ADDR2_MINT_AMOUNT);
 
       expect(await hardhatToken.totalSupply()).to.equal(
         Number(startSupply) + ADDR1_MINT_AMOUNT + ADDR2_MINT_AMOUNT
@@ -91,6 +88,66 @@ describe("Token contract", function () {
       await expect(
         hardhatToken.mint(addr1.address, CAP + 1)
       ).to.be.revertedWith("ERC20Capped: cap exceeded");
+    });
+  });
+
+  describe("Transfers", function () {
+    it("Should allow addresses to transfer tokens", async function () {
+      const MINT_AMOUNT = 100;
+      const TRANSFER_AMOUNT = 50;
+      await hardhatToken.mint(addr1.address, MINT_AMOUNT);
+      await hardhatToken.connect(addr1).transfer(addr2.address, TRANSFER_AMOUNT)
+
+      expect(await hardhatToken.balanceOf(
+        addr1.address
+      )).to.equal(MINT_AMOUNT - TRANSFER_AMOUNT);
+
+      expect(await hardhatToken.balanceOf(
+        addr2.address
+      )).to.equal(TRANSFER_AMOUNT);
+    });
+
+    it("Should not allow addresses to transfer more tokens greater than their balance", async function () {
+      const MINT_AMOUNT = 100;
+      const TRANSFER_AMOUNT = 500;
+      await hardhatToken.mint(addr1.address, MINT_AMOUNT);
+
+      await expect(
+        hardhatToken.connect(addr1).transfer(addr2.address, TRANSFER_AMOUNT)
+      ).to.be.revertedWith("ERC20: transfer amount exceeds balance");
+    });
+  });
+
+  describe("Burn", function () {
+    it("Should allow addresses to burn tokens", async function () {
+      const MINT_AMOUNT = 100;
+      const BURN_AMOUNT = 50;
+      await hardhatToken.mint(addr1.address, MINT_AMOUNT);
+      await hardhatToken.connect(addr1).burn(BURN_AMOUNT)
+
+      expect(await hardhatToken.balanceOf(
+        addr1.address
+      )).to.equal(MINT_AMOUNT - BURN_AMOUNT);
+    });
+
+    it("Should not allow addresses to burn more tokens than they have", async function () {
+      const MINT_AMOUNT = 100;
+      const BURN_AMOUNT = 500;
+      await hardhatToken.mint(addr1.address, MINT_AMOUNT);
+
+      await expect(
+        hardhatToken.connect(addr1).burn(BURN_AMOUNT)
+      ).to.be.revertedWith("ERC20: burn amount exceeds balance");
+    });
+
+    it("Should not allow addresses to burn others' tokens", async function () {
+      const MINT_AMOUNT = 100;
+      const BURN_AMOUNT = 50;
+      await hardhatToken.mint(addr1.address, MINT_AMOUNT);
+
+      await expect(
+        hardhatToken.connect(addr2).burnFrom(addr1.address, BURN_AMOUNT)
+      ).to.be.revertedWith("ERC20: burn amount exceeds allowance");
     });
   });
 });
