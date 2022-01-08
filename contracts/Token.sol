@@ -1,73 +1,40 @@
 //SPDX-License-Identifier: UNLICENSED
-
-// Solidity files have to start with this pragma.
-// It will be used by the Solidity compiler to validate its version.
 pragma solidity ^0.8.0;
 
-// We import this library to be able to use console.log
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
 import "hardhat/console.sol";
 
-
-// This is the main building block for smart contracts.
-contract Token {
-    // Some string type variables to identify the token.
-    string public name = "My Hardhat Token";
-    string public symbol = "MHT";
-
-    // The fixed amount of tokens stored in an unsigned integer type variable.
-    uint256 public totalSupply = 1000000;
-
-    // An address type variable is used to store ethereum accounts.
-    address public owner;
-
-    // A mapping is a key/value map. Here we store each account balance.
-    mapping(address => uint256) balances;
-
+contract Token is Ownable, ERC20Capped, ERC20Burnable {
     /**
-     * Contract initialization.
-     *
-     * The `constructor` is executed only once when the contract is created.
-     * The `public` modifier makes a function callable from outside the contract.
+     * @param name Name of the token
+     * @param symbol A symbol to be used as ticker
+     * @param cap Maximum number of tokens mintable
+     * @param initialSupply Initial token supply
      */
-    constructor() {
-        // The totalSupply is assigned to transaction sender, which is the account
-        // that is deploying the contract.
-        balances[msg.sender] = totalSupply;
-        owner = msg.sender;
+    constructor(
+        string memory name,
+        string memory symbol,
+        uint256 cap,
+        uint256 initialSupply
+    ) ERC20(name, symbol) ERC20Capped(cap) {
+        _mint(owner(), initialSupply);
     }
 
     /**
-     * A function to transfer tokens.
+     * @dev Creates `amount` new tokens for `to`.
      *
-     * The `external` modifier makes a function *only* callable from outside
-     * the contract.
+     * See {ERC20-_mint}.
      */
-    function transfer(address to, uint256 amount) external {
-        // Check if the transaction sender has enough tokens.
-        // If `require`'s first argument evaluates to `false` then the
-        // transaction will revert.
-        require(balances[msg.sender] >= amount, "Not enough tokens");
-
-        // We can print messages and values using console.log
-        console.log(
-            "Transferring from %s to %s %s tokens",
-            msg.sender,
-            to,
-            amount
-        );
-
-        // Transfer the amount.
-        balances[msg.sender] -= amount;
-        balances[to] += amount;
+    function mint(address to, uint256 amount) public onlyOwner virtual {
+        _mint(to, amount);
     }
 
-    /**
-     * Read only function to retrieve the token balance of a given account.
-     *
-     * The `view` modifier indicates that it doesn't modify the contract's
-     * state, which allows us to call it without executing a transaction.
-     */
-    function balanceOf(address account) external view returns (uint256) {
-        return balances[account];
+    function _mint(
+        address to,
+        uint256 amount
+    ) internal virtual override(ERC20, ERC20Capped) {
+        super._mint(to, amount);
     }
 }
