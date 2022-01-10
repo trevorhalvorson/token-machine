@@ -17,12 +17,7 @@ describe("Token contract", function () {
     Token = await ethers.getContractFactory("Token");
     [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
-    hardhatToken = await Token.deploy(
-      NAME,
-      SYMBOL,
-      CAP,
-      INITIAL_SUPPLY,
-    );
+    hardhatToken = await Token.deploy(NAME, SYMBOL, CAP, INITIAL_SUPPLY);
 
     await hardhatToken.deployed();
   });
@@ -46,9 +41,7 @@ describe("Token contract", function () {
   describe("Minting", function () {
     it("Should allow owner to mint tokens to address", async function () {
       await hardhatToken.mint(addr1.address, 500);
-      expect(await hardhatToken.balanceOf(
-        addr1.address
-      )).to.equal(500);
+      expect(await hardhatToken.balanceOf(addr1.address)).to.equal(500);
     });
 
     it("Should fail if minter is not owner", async function () {
@@ -58,9 +51,7 @@ describe("Token contract", function () {
         hardhatToken.connect(addr1).mint(addr1.address, 1)
       ).to.be.revertedWith("Ownable: caller is not the owner");
 
-      expect(await hardhatToken.totalSupply()).to.equal(
-        startSupply
-      );
+      expect(await hardhatToken.totalSupply()).to.equal(startSupply);
     });
 
     it("Should update balances and supply after mints", async function () {
@@ -71,13 +62,13 @@ describe("Token contract", function () {
       await hardhatToken.mint(addr1.address, ADDR1_MINT_AMOUNT);
       await hardhatToken.mint(addr2.address, ADDR2_MINT_AMOUNT);
 
-      expect(await hardhatToken.balanceOf(
-        addr1.address
-      )).to.equal(ADDR1_MINT_AMOUNT);
+      expect(await hardhatToken.balanceOf(addr1.address)).to.equal(
+        ADDR1_MINT_AMOUNT
+      );
 
-      expect(await hardhatToken.balanceOf(
-        addr2.address
-      )).to.equal(ADDR2_MINT_AMOUNT);
+      expect(await hardhatToken.balanceOf(addr2.address)).to.equal(
+        ADDR2_MINT_AMOUNT
+      );
 
       expect(await hardhatToken.totalSupply()).to.equal(
         Number(startSupply) + ADDR1_MINT_AMOUNT + ADDR2_MINT_AMOUNT
@@ -96,15 +87,17 @@ describe("Token contract", function () {
       const MINT_AMOUNT = 100;
       const TRANSFER_AMOUNT = 50;
       await hardhatToken.mint(addr1.address, MINT_AMOUNT);
-      await hardhatToken.connect(addr1).transfer(addr2.address, TRANSFER_AMOUNT)
+      await hardhatToken
+        .connect(addr1)
+        .transfer(addr2.address, TRANSFER_AMOUNT);
 
-      expect(await hardhatToken.balanceOf(
-        addr1.address
-      )).to.equal(MINT_AMOUNT - TRANSFER_AMOUNT);
+      expect(await hardhatToken.balanceOf(addr1.address)).to.equal(
+        MINT_AMOUNT - TRANSFER_AMOUNT
+      );
 
-      expect(await hardhatToken.balanceOf(
-        addr2.address
-      )).to.equal(TRANSFER_AMOUNT);
+      expect(await hardhatToken.balanceOf(addr2.address)).to.equal(
+        TRANSFER_AMOUNT
+      );
     });
 
     it("Should not allow addresses to transfer more tokens greater than their balance", async function () {
@@ -123,11 +116,11 @@ describe("Token contract", function () {
       const MINT_AMOUNT = 100;
       const BURN_AMOUNT = 50;
       await hardhatToken.mint(addr1.address, MINT_AMOUNT);
-      await hardhatToken.connect(addr1).burn(BURN_AMOUNT)
+      await hardhatToken.connect(addr1).burn(BURN_AMOUNT);
 
-      expect(await hardhatToken.balanceOf(
-        addr1.address
-      )).to.equal(MINT_AMOUNT - BURN_AMOUNT);
+      expect(await hardhatToken.balanceOf(addr1.address)).to.equal(
+        MINT_AMOUNT - BURN_AMOUNT
+      );
     });
 
     it("Should not allow addresses to burn more tokens than they have", async function () {
