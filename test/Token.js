@@ -115,11 +115,17 @@ describe("Token contract", function () {
     it("Should allow addresses to burn tokens", async function () {
       const MINT_AMOUNT = 100;
       const BURN_AMOUNT = 50;
+      const startSupply = await hardhatToken.totalSupply();
+
       await hardhatToken.mint(addr1.address, MINT_AMOUNT);
       await hardhatToken.connect(addr1).burn(BURN_AMOUNT);
 
       expect(await hardhatToken.balanceOf(addr1.address)).to.equal(
         MINT_AMOUNT - BURN_AMOUNT
+      );
+
+      expect(await hardhatToken.totalSupply()).to.equal(
+        Number(startSupply) + MINT_AMOUNT - BURN_AMOUNT
       );
     });
 
