@@ -19,8 +19,33 @@ async function main() {
 
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
+  const name = process.env.TOKEN_NAME;
+  if (name == null) {
+    console.error("TOKEN_NAME required");
+    process.exit(1);
+  }
+  const symbol = process.env.TOKEN_SYMBOL;
+  if (symbol == null) {
+    console.error("TOKEN_SYMBOL required");
+    process.exit(1);
+  }
+  const cap = process.env.TOKEN_CAP;
+  if (cap == null) {
+    console.error("TOKEN_CAP required");
+    process.exit(1);
+  }
+  const initialSupply = process.env.TOKEN_INITIAL_SUPPLY;
+  if (initialSupply == null) {
+    console.error("TOKEN_INITIAL_SUPPLY required");
+    process.exit(1);
+  }
+
+  console.log(`Creating token: ${name} (${symbol})`);
+  console.log(`Cap: ${cap}`);
+  console.log(`Initial supply: ${initialSupply}`);
+
   const Token = await ethers.getContractFactory("Token");
-  const token = await Token.deploy();
+  const token = await Token.deploy(name, symbol, cap, initialSupply);
   await token.deployed();
 
   console.log("Token address:", token.address);

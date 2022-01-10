@@ -6,7 +6,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "hardhat test"
+    "test": "hardhat test",
+    "test-deploy": "TOKEN_NAME=\"Test Token\" TOKEN_SYMBOL=TEST TOKEN_CAP=1000000000 TOKEN_INITIAL_SUPPLY=100000 npx hardhat run scripts/deploy.js"
   },
   "repository": {
     "type": "git",
