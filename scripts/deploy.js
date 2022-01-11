@@ -50,13 +50,13 @@ async function main() {
 
   console.log("Token address:", token.address);
 
-  // We also save the contract's artifacts and address in the frontend directory
-  saveFrontendFiles(token);
+  // We also save the contract's artifacts and address in the frontend + backend directories
+  saveContractFiles(__dirname + "/../frontend/src/contracts", token);
+  saveContractFiles(__dirname + "/../backend/src/contracts", token);
 }
 
-function saveFrontendFiles(token) {
+function saveContractFiles(contractsDir, token) {
   const fs = require("fs");
-  const contractsDir = __dirname + "/../frontend/src/contracts";
 
   if (!fs.existsSync(contractsDir)) {
     fs.mkdirSync(contractsDir);
