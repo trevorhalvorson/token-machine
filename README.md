@@ -1,21 +1,60 @@
-# T Money
+# Token Machine
 
-ERC20 token.
+Easily create your own ERC20 token and minting app.
 
-Built using:
+- Customize your token name, symbol, initial supply, total cap, and mint amount
+- Deploy your contract to the blockchain
+- Allow users to mint tokens from your web app by solving a captcha
+
+Built with:
 
 - [Hardhat](https://hardhat.org/)
 - [OpenZeppelin Contracts](https://docs.openzeppelin.com/contracts/4.x/)
 - [Alchemy](https://www.alchemy.com/)
 - [ethers.js](https://docs.ethers.io/v5/)
+- [hCaptcha](https://www.hcaptcha.com/)
 - [Express](https://expressjs.com/)
 - [React](https://reactjs.org/)
 
 ## Components
 
-- [Contracts](./contracts/Token.sol): Solidity contract for the token
-- [Frontend](./frontend): Web app (React) to interact with the contract
-- [Backend](./backend): HTTP APIs (ExpressJS) to interact with the contract
+### Contract
+
+[Token.sol](./contracts/Token.sol) is the Solidity contract for the token.
+Tests can be found [here](./test/Token.js).
+
+The contract development, testing, and deployment is managed using Hardhat.
+See [hardhat.config.js](./hardhat.config.js) and [deploy.js](./scripts/deploy.js).
+
+A `.env` file (at the root of the project directory) with the following variables set is required:
+
+```
+ALCHEMY_API_KEY=
+PRIVATE_KEY=
+TOKEN_NAME=
+TOKEN_SYMBOL=
+TOKEN_CAP=
+TOKEN_INITIAL_SUPPLY=
+```
+
+### Backend
+
+HTTP APIs to interact with the contract.
+
+A `.env` file (at the root of the `backend` directory) with the following variables set is required:
+
+```
+ETHERS_PROVIDER_NETWORK=
+ALCHEMY_API_KEY=
+SIGNER_ADDRESS=
+PRIVATE_KEY=
+MINT_AMOUNT=
+HCAPTCHA_SECRET=
+```
+
+### Frontend
+
+Web app to interact with the contract.
 
 # Hardhat Hackathon Boilerplate
 
