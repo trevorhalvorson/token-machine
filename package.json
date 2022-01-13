@@ -7,7 +7,7 @@
   },
   "scripts": {
     "test": "hardhat test",
-    "test-deploy": "TOKEN_NAME=\"Test Token\" TOKEN_SYMBOL=TEST TOKEN_CAP=1000000000 TOKEN_INITIAL_SUPPLY=100000 npx hardhat run scripts/deploy.js"
+    "test-deploy": "npx hardhat run scripts/deploy.js --network hardhat"
   },
   "repository": {
     "type": "git",
@@ -29,13 +29,11 @@
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@openzeppelin/contracts": "^4.4.1",
     "chai": "^4.3.4",
+    "dotenv": "^11.0.0",
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.5.3",
     "hardhat": "^2.8.2",
     "husky": "^4.3.8",
     "prettier": "2.5.1"
-  },
-  "dependencies": {
-    "dotenv": "^11.0.0"
   }
 }

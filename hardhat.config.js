@@ -7,14 +7,18 @@ require("@nomiclabs/hardhat-waffle");
 require("./tasks/faucet");
 
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
-const RINKEBY_PRIVATE_KEY = process.env.RINKEBY_PRIVATE_KEY;
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 module.exports = {
   solidity: "0.8.9",
+  defaultNetwork: "localhost",
   networks: {
+    localhost: {
+      url: "http://127.0.0.1:8545",
+    },
     rinkeby: {
       url: `https://eth-rinkeby.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
-      accounts: [`${RINKEBY_PRIVATE_KEY}`],
+      accounts: [`${PRIVATE_KEY}`],
     },
   },
 };

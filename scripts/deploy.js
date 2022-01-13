@@ -50,9 +50,11 @@ async function main() {
 
   console.log("Token address:", token.address);
 
-  // We also save the contract's artifacts and address in the frontend + backend directories
-  saveContractFiles(__dirname + "/../frontend/src/contracts", token);
-  saveContractFiles(__dirname + "/../backend/src/contracts", token);
+  if (network.name !== "hardhat") {
+    // We also save the contract's artifacts and address in the frontend + backend directories
+    saveContractFiles(__dirname + "/../frontend/src/contracts", token);
+    saveContractFiles(__dirname + "/../backend/src/contracts", token);
+  }
 }
 
 function saveContractFiles(contractsDir, token) {
