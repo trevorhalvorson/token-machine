@@ -1,4 +1,6 @@
+import 'dotenv/config';
 import bodyParser from "body-parser";
+import cors from "cors";
 import express, { Application, Request, Response } from "express";
 
 import token from "./token";
@@ -7,6 +9,7 @@ const app: Application = express();
 
 const port = process.env.PORT || 3333;
 
+app.use(cors())
 app.use(bodyParser.json());
 app.use("/token", token);
 
