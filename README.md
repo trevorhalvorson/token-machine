@@ -1,3 +1,22 @@
+# T Money
+
+ERC20 token.
+
+Built using:
+
+- [Hardhat](https://hardhat.org/)
+- [OpenZeppelin Contracts](https://docs.openzeppelin.com/contracts/4.x/)
+- [Alchemy](https://www.alchemy.com/)
+- [ethers.js](https://docs.ethers.io/v5/)
+- [Express](https://expressjs.com/)
+- [React](https://reactjs.org/)
+
+## Components
+
+- [Contracts](./contracts/Token.sol): Solidity contract for the token
+- [Frontend](./frontend): Web app (React) to interact with the contract
+- [Backend](./backend): HTTP APIs (ExpressJS) to interact with the contract
+
 # Hardhat Hackathon Boilerplate
 
 This repository contains a sample project that you can use as the starting point
