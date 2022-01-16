@@ -16,6 +16,12 @@ Built with:
 - [Express](https://expressjs.com/)
 - [React](https://reactjs.org/)
 
+**Setup prerequisites**
+
+- [node](https://nodejs.org/en/download/)
+- [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [npx](https://www.npmjs.com/package/npx)
+
 ## Components
 
 ### Contract
@@ -29,27 +35,67 @@ See [hardhat.config.js](./hardhat.config.js) and [deploy.js](./scripts/deploy.js
 A `.env` file (at the root of the project directory) with the following variables set is required:
 
 ```
+# API Key from Alchemy - https://www.alchemy.com/
 ALCHEMY_API_KEY=
+# Private key from wallet deploying the contract
 PRIVATE_KEY=
+# Name for your token e.g. "Test Token"
 TOKEN_NAME=
+# Symbol for your token e.g. TEST
 TOKEN_SYMBOL=
+# Total cap for your token
 TOKEN_CAP=
+# Tokens minted to the wallet deploying the contract
 TOKEN_INITIAL_SUPPLY=
+```
+
+**Setup**
+
+Install dependencies:
+
+```
+npm install
+```
+
+**Deployment**
+
+```
+npx hardhat run scripts/deploy.js --network rinkeby
 ```
 
 ### Backend
 
 HTTP APIs to interact with the contract.
 
+**Setup**
+
 A `.env` file (at the root of the `backend` directory) with the following variables set is required:
 
 ```
+# Common network name e.g. rinkeby - https://docs.ethers.io/v5/api/providers/api-providers/#AlchemyProvider
 ETHERS_PROVIDER_NETWORK=
+# API Key from Alchemy - https://www.alchemy.com/
 ALCHEMY_API_KEY=
+# Address of wallet that deployed the contract
 SIGNER_ADDRESS=
+# Private key from wallet deploying the contract
 PRIVATE_KEY=
+# Amount of tokens to mint to users
 MINT_AMOUNT=
+# Secret from hcaptcha.com
 HCAPTCHA_SECRET=
+```
+
+Install dependencies:
+
+```
+npm install
+```
+
+**Run**
+
+```
+npm run dev
 ```
 
 ### Frontend
