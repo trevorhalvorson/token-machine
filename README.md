@@ -72,6 +72,8 @@ HTTP APIs to interact with the contract.
 A `.env` file (at the root of the `backend` directory) with the following variables set is required:
 
 ```
+# Port number to run/expose the web server on
+PORT=
 # Common network name e.g. rinkeby - https://docs.ethers.io/v5/api/providers/api-providers/#AlchemyProvider
 ETHERS_PROVIDER_NETWORK=
 # API Key from Alchemy - https://www.alchemy.com/

@@ -3,9 +3,9 @@ import { Contract, ethers, Wallet } from "ethers";
 import { AlchemyProvider } from "@ethersproject/providers";
 import { verify } from 'hcaptcha';
 
+import { TypedRequestBody } from "./utils";
 import { Token } from "./contracts/contract-address.json";
 import { abi } from "./contracts/Token.json";
-import { TypedRequestBody } from "./utils";
 
 const contract: Contract = new ethers.Contract(Token, abi);
 const provider: AlchemyProvider = new ethers.providers.AlchemyProvider(
