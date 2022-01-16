@@ -100,6 +100,10 @@ npm install
 npm start
 ```
 
+**Deployment**
+
+The web server can be deployed using its [Dockerfile](./backend/Dockerfile).
+
 ### Frontend
 
 Web app to interact with the contract.
