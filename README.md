@@ -56,6 +56,31 @@ HCAPTCHA_SECRET=
 
 Web app to interact with the contract.
 
+**Setup**
+
+A `.env` file (at the root of the `backend` directory) with the following variables set is required:
+
+```
+# Base URL for `backend` e.g. http://localhost:3333
+REACT_APP_API_BASE_URL=
+# hCaptcha site key - hcaptcha.com
+REACT_APP_HCAPTCHA_SITE_KEY=
+# Ethereum Chain ID - e.g. 0x4 - https://docs.metamask.io/guide/ethereum-provider.html#chain-ids
+REACT_APP_CHAIN_ID=
+```
+
+Install dependencies:
+
+```
+npm install
+```
+
+**Run**
+
+```
+npm start
+```
+
 # Hardhat Hackathon Boilerplate
 
 This repository contains a sample project that you can use as the starting point
