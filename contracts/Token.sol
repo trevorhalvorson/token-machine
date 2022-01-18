@@ -1,4 +1,4 @@
-//SPDX-License-Identifier: UNLICENSED
+//SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -18,8 +18,8 @@ contract Token is Ownable, ERC20Capped, ERC20Burnable {
         string memory symbol,
         uint256 cap,
         uint256 initialSupply
-    ) ERC20(name, symbol) ERC20Capped(cap) {
-        _mint(owner(), initialSupply);
+    ) ERC20(name, symbol) ERC20Capped(cap * (10**18)) {
+        _mint(owner(), initialSupply * (10**18));
     }
 
     /**
@@ -27,14 +27,15 @@ contract Token is Ownable, ERC20Capped, ERC20Burnable {
      *
      * See {ERC20-_mint}.
      */
-    function mint(address to, uint256 amount) public onlyOwner virtual {
-        _mint(to, amount);
+    function mint(address to, uint256 amount) public virtual onlyOwner {
+        _mint(to, amount * (10**18));
     }
 
-    function _mint(
-        address to,
-        uint256 amount
-    ) internal virtual override(ERC20, ERC20Capped) {
+    function _mint(address to, uint256 amount)
+        internal
+        virtual
+        override(ERC20, ERC20Capped)
+    {
         super._mint(to, amount);
     }
 }

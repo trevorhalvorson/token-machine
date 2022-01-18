@@ -1,10 +1,12 @@
 const { expect } = require("chai");
 
+const decimals = "000000000000000000";
+
 describe("Token contract", function () {
   const NAME = "TestToken";
   const SYMBOL = "TEST";
-  const CAP = 1000000;
-  const INITIAL_SUPPLY = 100000;
+  const CAP = "1000000000";
+  const INITIAL_SUPPLY = "1000000";
 
   let Token;
   let hardhatToken;
@@ -28,20 +30,25 @@ describe("Token contract", function () {
     });
 
     it("Should have a total supply of tokens equal to the given cap", async function () {
-      expect(await hardhatToken.cap()).to.equal(CAP);
+      expect(await hardhatToken.cap()).to.equal(
+        ethers.BigNumber.from(CAP + decimals)
+      );
     });
 
     it("Should assign the initial supply of tokens equal to the owner", async function () {
       expect(await hardhatToken.balanceOf(owner.address)).to.equal(
-        INITIAL_SUPPLY
+        INITIAL_SUPPLY + decimals
       );
     });
   });
 
   describe("Minting", function () {
     it("Should allow owner to mint tokens to address", async function () {
-      await hardhatToken.mint(addr1.address, 500);
-      expect(await hardhatToken.balanceOf(addr1.address)).to.equal(500);
+      const mint = "500";
+      await hardhatToken.mint(addr1.address, Number(mint));
+      expect(await hardhatToken.balanceOf(addr1.address)).to.equal(
+        mint + decimals
+      );
     });
 
     it("Should fail if minter is not owner", async function () {
@@ -56,22 +63,24 @@ describe("Token contract", function () {
 
     it("Should update balances and supply after mints", async function () {
       const startSupply = await hardhatToken.totalSupply();
-      const ADDR1_MINT_AMOUNT = 100;
-      const ADDR2_MINT_AMOUNT = 1000;
+      const ADDR1_MINT_AMOUNT = "100";
+      const ADDR2_MINT_AMOUNT = "1000";
 
-      await hardhatToken.mint(addr1.address, ADDR1_MINT_AMOUNT);
-      await hardhatToken.mint(addr2.address, ADDR2_MINT_AMOUNT);
+      await hardhatToken.mint(addr1.address, Number(ADDR1_MINT_AMOUNT));
+      await hardhatToken.mint(addr2.address, Number(ADDR2_MINT_AMOUNT));
 
       expect(await hardhatToken.balanceOf(addr1.address)).to.equal(
-        ADDR1_MINT_AMOUNT
+        ADDR1_MINT_AMOUNT + decimals
       );
 
       expect(await hardhatToken.balanceOf(addr2.address)).to.equal(
-        ADDR2_MINT_AMOUNT
+        ADDR2_MINT_AMOUNT + decimals
       );
 
       expect(await hardhatToken.totalSupply()).to.equal(
-        Number(startSupply) + ADDR1_MINT_AMOUNT + ADDR2_MINT_AMOUNT
+        startSupply
+          .add(ethers.BigNumber.from(ADDR1_MINT_AMOUNT + decimals))
+          .add(ethers.BigNumber.from(ADDR2_MINT_AMOUNT + decimals))
       );
     });
 
@@ -89,14 +98,16 @@ describe("Token contract", function () {
       await hardhatToken.mint(addr1.address, MINT_AMOUNT);
       await hardhatToken
         .connect(addr1)
-        .transfer(addr2.address, TRANSFER_AMOUNT);
+        .transfer(addr2.address, TRANSFER_AMOUNT.toString() + decimals);
 
       expect(await hardhatToken.balanceOf(addr1.address)).to.equal(
-        MINT_AMOUNT - TRANSFER_AMOUNT
+        ethers.BigNumber.from(
+          (MINT_AMOUNT - TRANSFER_AMOUNT).toString() + decimals
+        )
       );
 
       expect(await hardhatToken.balanceOf(addr2.address)).to.equal(
-        TRANSFER_AMOUNT
+        ethers.BigNumber.from(TRANSFER_AMOUNT.toString() + decimals)
       );
     });
 
@@ -106,7 +117,9 @@ describe("Token contract", function () {
       await hardhatToken.mint(addr1.address, MINT_AMOUNT);
 
       await expect(
-        hardhatToken.connect(addr1).transfer(addr2.address, TRANSFER_AMOUNT)
+        hardhatToken
+          .connect(addr1)
+          .transfer(addr2.address, TRANSFER_AMOUNT.toString() + decimals)
       ).to.be.revertedWith("ERC20: transfer amount exceeds balance");
     });
   });
@@ -118,14 +131,16 @@ describe("Token contract", function () {
       const startSupply = await hardhatToken.totalSupply();
 
       await hardhatToken.mint(addr1.address, MINT_AMOUNT);
-      await hardhatToken.connect(addr1).burn(BURN_AMOUNT);
+      await hardhatToken.connect(addr1).burn(BURN_AMOUNT.toString() + decimals);
 
       expect(await hardhatToken.balanceOf(addr1.address)).to.equal(
-        MINT_AMOUNT - BURN_AMOUNT
+        ethers.BigNumber.from((MINT_AMOUNT - BURN_AMOUNT).toString() + decimals)
       );
 
       expect(await hardhatToken.totalSupply()).to.equal(
-        Number(startSupply) + MINT_AMOUNT - BURN_AMOUNT
+        startSupply
+          .add(ethers.BigNumber.from(MINT_AMOUNT + decimals))
+          .sub(ethers.BigNumber.from(BURN_AMOUNT + decimals))
       );
     });
 
@@ -135,7 +150,7 @@ describe("Token contract", function () {
       await hardhatToken.mint(addr1.address, MINT_AMOUNT);
 
       await expect(
-        hardhatToken.connect(addr1).burn(BURN_AMOUNT)
+        hardhatToken.connect(addr1).burn(BURN_AMOUNT.toString() + decimals)
       ).to.be.revertedWith("ERC20: burn amount exceeds balance");
     });
 
@@ -145,7 +160,9 @@ describe("Token contract", function () {
       await hardhatToken.mint(addr1.address, MINT_AMOUNT);
 
       await expect(
-        hardhatToken.connect(addr2).burnFrom(addr1.address, BURN_AMOUNT)
+        hardhatToken
+          .connect(addr2)
+          .burnFrom(addr1.address, BURN_AMOUNT.toString() + decimals)
       ).to.be.revertedWith("ERC20: burn amount exceeds allowance");
     });
   });
