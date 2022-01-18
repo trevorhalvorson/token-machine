@@ -74,8 +74,8 @@ A `.env` file (at the root of the `backend` directory) with the following variab
 ```
 # Port number to run/expose the web server on
 PORT=
-# Common network name e.g. rinkeby - https://docs.ethers.io/v5/api/providers/api-providers/#AlchemyProvider
-ETHERS_PROVIDER_NETWORK=
+# Common network name e.g. rinkeby - https://docs.ethers.io/v5/api/providers/types/#providers-Network
+NETWORK_NAME=
 # API Key from Alchemy - https://www.alchemy.com/
 ALCHEMY_API_KEY=
 # Address of wallet that deployed the contract

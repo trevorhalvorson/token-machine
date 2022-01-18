@@ -9,7 +9,7 @@ import { abi } from "./contracts/Token.json";
 
 const contract: Contract = new ethers.Contract(Token, abi);
 const provider: AlchemyProvider = new ethers.providers.AlchemyProvider(
-  process.env.ETHERS_PROVIDER_NETWORK!,
+  process.env.NETWORK_NAME!,
   process.env.ALCHEMY_API_KEY!
 );
 const wallet = new Wallet(process.env.PRIVATE_KEY!, provider);
