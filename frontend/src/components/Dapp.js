@@ -18,6 +18,7 @@ import { Wallet } from "./Wallet";
 import { Loading } from "./Loading";
 import { Mint } from "./Mint";
 import { Captcha } from "./Captcha";
+import { AddToken } from "./AddToken";
 import { TransactionErrorMessage } from "./TransactionErrorMessage";
 import { WaitingForTransactionMessage } from "./WaitingForTransactionMessage";
 
@@ -86,12 +87,18 @@ export class Dapp extends React.Component {
               </h1>
             )) || <h1 className="primary-text">Token Machine</h1>}
           </div>
-          <Wallet
-            connectWallet={() => this._connectWallet()}
-            selectedAddress={this.state.selectedAddress}
-            networkError={this.state.networkError}
-            dismiss={() => this._dismissNetworkError()}
-          />
+          <div className="row d-flex justify-content-end align-items-center">
+            <Wallet
+              connectWallet={() => this._connectWallet()}
+              selectedAddress={this.state.selectedAddress}
+              networkError={this.state.networkError}
+              dismiss={() => this._dismissNetworkError()}
+            />
+            <AddToken
+              enabled={this.state.selectedAddress != null}
+              onAdd={() => this._addTokenToWallet()}
+            />
+          </div>
         </div>
         <div className="row d-flex justify-content-center align-items-center">
           {/* 
@@ -294,6 +301,26 @@ export class Dapp extends React.Component {
   // This method resets the state
   _resetState() {
     this.setState(this.initialState);
+  }
+
+  async _addTokenToWallet() {
+    try {
+      await window.ethereum.request({
+        method: "wallet_watchAsset",
+        params: {
+          type: "ERC20",
+          options: {
+            address: contractAddress.Token,
+            symbol: this.state.tokenData.symbol,
+            decimals: 18,
+          },
+        },
+      });
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
   }
 
   // This method checks if Metamask selected network is process.env.CHAIN_ID
