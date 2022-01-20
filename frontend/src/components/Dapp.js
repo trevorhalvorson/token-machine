@@ -126,17 +126,19 @@ export class Dapp extends React.Component {
           style={{ height: "100vh" }}
         >
           <div>
-            <Captcha
-              onRef={(r) => {
-                captchaRef = r;
-              }}
-              onVerify={(captchaToken) => {
-                this.setState({ captchaToken });
-              }}
-              onExpire={() => {
-                this.setState({ captchaToken: null });
-              }}
-            />
+            {this.state.selectedAddress && (
+              <Captcha
+                onRef={(r) => {
+                  captchaRef = r;
+                }}
+                onVerify={(captchaToken) => {
+                  this.setState({ captchaToken });
+                }}
+                onExpire={() => {
+                  this.setState({ captchaToken: null });
+                }}
+              />
+            )}
             <div>&nbsp;</div>
             <div className="d-flex justify-content-center align-items-center">
               <Mint
