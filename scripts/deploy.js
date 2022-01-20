@@ -48,7 +48,12 @@ async function main() {
   const token = await Token.deploy(name, symbol, cap, initialSupply);
   await token.deployed();
 
-  console.log("Token address:", token.address);
+  // https://github.com/nomiclabs/hardhat/issues/2162
+  const txHash = token.deployTransaction.hash;
+  console.log(`Tx hash: ${txHash}\nWaiting for transaction to be mined...`);
+  const txReceipt = await ethers.provider.waitForTransaction(txHash);
+
+  console.log("Contract address:", txReceipt.contractAddress);
 
   if (network.name !== "hardhat") {
     // We also save the contract's artifacts and address in the frontend + backend directories

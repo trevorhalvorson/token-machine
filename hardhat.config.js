@@ -16,8 +16,8 @@ module.exports = {
     localhost: {
       url: "http://127.0.0.1:8545",
     },
-    rinkeby: {
-      url: `https://eth-rinkeby.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
+    matic: {
+      url: `https://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
       accounts: [`${PRIVATE_KEY}`],
     },
   },

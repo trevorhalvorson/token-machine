@@ -1,6 +1,7 @@
 import express, { Request, Response, Router } from "express";
 import { Contract, ethers, Wallet } from "ethers";
 import { AlchemyProvider } from "@ethersproject/providers";
+import { NonceManager } from "@ethersproject/experimental";
 import { verify } from 'hcaptcha';
 
 import { TypedRequestBody } from "./utils";
@@ -13,6 +14,7 @@ const provider: AlchemyProvider = new ethers.providers.AlchemyProvider(
   process.env.ALCHEMY_API_KEY!
 );
 const wallet = new Wallet(process.env.PRIVATE_KEY!, provider);
+const signer = new NonceManager(wallet);
 const mintAmount = Number(process.env.MINT_AMOUNT!);
 
 const router: Router = express.Router();
@@ -50,7 +52,7 @@ router.post("/mint", async (req: TypedRequestBody<{ address: string, token: stri
       return;
   }
   try {
-    const transaction = await contract.connect(wallet).mint(address, mintAmount);
+    const transaction = await contract.connect(signer).mint(address, mintAmount);
     res.status(200).json({ hash: transaction.hash });
     return;
   } catch (error) {
