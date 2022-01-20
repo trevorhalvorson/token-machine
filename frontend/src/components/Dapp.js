@@ -151,7 +151,10 @@ export class Dapp extends React.Component {
             <div className="d-flex justify-content-center align-items-center">
               {this.state.selectedAddress != null ? (
                 <p className="primary-text">
-                  Balance: {this.state.balance.toString()}{" "}
+                  Balance:{" "}
+                  {ethers.utils.formatEther(
+                    ethers.BigNumber.from(this.state.balance)
+                  )}{" "}
                   {this.state.tokenData.symbol}
                 </p>
               ) : (
