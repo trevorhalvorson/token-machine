@@ -42,7 +42,10 @@ export class Dapp extends React.Component {
     // You don't need to follow this pattern, but it's an useful example.
     this.initialState = {
       // The info of the token (i.e. It's Name and symbol)
-      tokenData: undefined,
+      tokenData: {
+        name: process.env.REACT_APP_TOKEN_NAME,
+        symbol: process.env.REACT_APP_TOKEN_SYMBOL,
+      },
       // The user's address and balance
       selectedAddress: undefined,
       balance: undefined,
@@ -80,7 +83,7 @@ export class Dapp extends React.Component {
       <div className="container">
         <div className="row d-flex justify-content-between align-items-center">
           <div>
-            {(this.state.selectedAddress && (
+            {(this.state.tokenData.name && this.state.tokenData.symbol && (
               <h1 className="primary-text">
                 {this.state.tokenData.name} ({this.state.tokenData.symbol})
                 Machine
@@ -331,7 +334,7 @@ export class Dapp extends React.Component {
   // This method checks if Metamask selected network is process.env.CHAIN_ID
   async _checkNetwork() {
     const chainId = await window.ethereum.request({ method: "eth_chainId" });
-    if (CHAIN_ID == chainId) {
+    if (CHAIN_ID === chainId) {
       return true;
     }
     try {

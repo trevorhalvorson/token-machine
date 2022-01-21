@@ -119,6 +119,10 @@ REACT_APP_API_BASE_URL=
 REACT_APP_HCAPTCHA_SITE_KEY=
 # Ethereum Chain ID - e.g. 0x4 - https://docs.metamask.io/guide/ethereum-provider.html#chain-ids
 REACT_APP_CHAIN_ID=
+# Token name
+REACT_APP_TOKEN_NAME=
+# Token symbol
+REACT_APP_TOKEN_SYMBOL=
 ```
 
 Install dependencies:
