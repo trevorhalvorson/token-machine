@@ -4,6 +4,8 @@ import React from "react";
 
 // We'll use ethers to interact with the Ethereum network and our contract
 import { ethers } from "ethers";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 // We import the contract's artifacts and address here, as we are going to be
 // using them with ethers
@@ -91,16 +93,29 @@ export class Dapp extends React.Component {
             )) || <h1 className="primary-text">Token Machine</h1>}
           </div>
           <div className="row d-flex justify-content-end align-items-center">
-            <Wallet
-              connectWallet={() => this._connectWallet()}
-              selectedAddress={this.state.selectedAddress}
-              networkError={this.state.networkError}
-              dismiss={() => this._dismissNetworkError()}
-            />
-            <AddToken
-              enabled={this.state.selectedAddress != null}
-              onAdd={() => this._addTokenToWallet()}
-            />
+            <div
+              className="row d-flex justify-content-end align-items-center"
+              style={{
+                marginRight: "24px",
+              }}
+            >
+              <Wallet
+                connectWallet={() => this._connectWallet()}
+                selectedAddress={this.state.selectedAddress}
+                networkError={this.state.networkError}
+                dismiss={() => this._dismissNetworkError()}
+              />
+              <AddToken
+                enabled={this.state.selectedAddress != null}
+                onAdd={() => this._addTokenToWallet()}
+              />
+            </div>
+            <a
+              href="https://github.com/trevorhalvorson/token-machine"
+              target="_blank"
+            >
+              <FontAwesomeIcon icon={faGithub} size="2x" inverse />
+            </a>
           </div>
         </div>
         <div className="row d-flex justify-content-center align-items-center">
